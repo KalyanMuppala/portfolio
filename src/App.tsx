@@ -3,25 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { motion, AnimatePresence, useSpring, useMotionValue, useTransform, useMotionTemplate } from 'motion/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Routes, Route, Link } from 'react-router-dom'; // Removed BrowserRouter
+import { motion, AnimatePresence, useSpring, useMotionValue } from 'motion/react';
 import Resume from './components/Resume';
 import { 
   Cloud, 
   Terminal, 
   Shield, 
-  Network, 
   Cpu, 
-  ExternalLink, 
   Mail, 
-  Linkedin, 
   ChevronRight,
   Award,
   BookOpen,
-  Server,
-  Activity,
-  Code2,
   Sun,
   Moon,
   ArrowRight,
@@ -54,8 +48,7 @@ const experiences: Experience[] = [
       "Implemented monitoring, logging, and alerting with CloudWatch using observability best practices, resulting in 99.9% system uptime.",
       "Enhanced cloud security by implementing IAM least-privilege policies, managing secrets, and enforcing encryption.",
       "Optimized cloud costs by rightsizing EC2/ECS instances, applying tagging strategies, and conducting capacity planning.",
-      "Lead incident troubleshooting, root cause analysis, and postmortems to improve platform reliability.",
-      "Partnered with application, DevOps, and security teams to design and deploy secure, scalable AWS solutions."
+      "Lead incident troubleshooting, root cause analysis, and postmortems to improve platform reliability."
     ]
   },
   {
@@ -65,9 +58,7 @@ const experiences: Experience[] = [
     description: [
       "Designed and supported Azure infrastructure for analytics and research workloads using ARM templates and Azure Key Vault.",
       "Implemented Azure IaaS and PaaS services including Virtual Machines, VNets, Azure Storage, and Azure Monitor.",
-      "Assisted with cloud automation and Infrastructure as Code, improving deployment consistency and operational reliability.",
-      "Supported backup, disaster recovery, and performance optimization for Azure workloads by configuring Azure Backup policies.",
-      "Collaborated with cross-functional teams to document cloud architectures and operational runbooks."
+      "Assisted with cloud automation and Infrastructure as Code, improving deployment consistency and operational reliability."
     ]
   },
   {
@@ -77,10 +68,7 @@ const experiences: Experience[] = [
     description: [
       "Supported and maintained AWS cloud infrastructure including EC2, VPC, IAM, S3, RDS, and networking components.",
       "Assisted in Terraform-based provisioning and environment automation across development and production accounts.",
-      "Supported containerized workloads on Kubernetes, deploying applications and troubleshooting issues.",
-      "Developed Python and Bash automation scripts to reduce manual operational tasks and improve efficiency.",
-      "Performed Linux system administration, set up CloudWatch monitoring alerts, and provided incident response.",
-      "Collaborated with senior engineers on cloud migrations and CI/CD pipelines using Docker and AWS CloudWatch."
+      "Developed Python and Bash automation scripts to reduce manual operational tasks and improve efficiency."
     ]
   }
 ];
@@ -228,15 +216,12 @@ const AnimatedBackground = ({ isDark }: { isDark: boolean }) => {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      {/* Base Background */}
       <motion.div 
         animate={{ 
           backgroundColor: isDark ? '#050505' : '#f8fafc'
         }}
         className="absolute inset-0 transition-colors duration-1000"
       />
-      
-      {/* Atmospheric Gradients */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
           animate={{
@@ -256,17 +241,8 @@ const AnimatedBackground = ({ isDark }: { isDark: boolean }) => {
           transition={{ duration: 45, repeat: Infinity, ease: "easeInOut" }}
           className={`absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] rounded-full blur-[150px] opacity-[0.15] ${isDark ? 'bg-purple-600' : 'bg-purple-200'}`}
         />
-        <motion.div
-          animate={{
-            x: [0, 50, -50, 0],
-            y: [0, 50, -50, 0],
-          }}
-          transition={{ duration: 50, repeat: Infinity, ease: "easeInOut" }}
-          className={`absolute top-[20%] right-[10%] w-[50%] h-[50%] rounded-full blur-[150px] opacity-[0.1] ${isDark ? 'bg-indigo-600' : 'bg-indigo-100'}`}
-        />
       </div>
 
-      {/* Dynamic Cursor Glow (Light Leak) */}
       <motion.div
         style={{
           x: glowX,
@@ -280,7 +256,6 @@ const AnimatedBackground = ({ isDark }: { isDark: boolean }) => {
         className={`absolute w-[1000px] h-[1000px] rounded-full blur-[120px] ${isDark ? 'mix-blend-screen' : 'mix-blend-multiply opacity-20'}`}
       />
 
-      {/* Subtle Noise Texture */}
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay" 
         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
       />
@@ -321,7 +296,6 @@ export default function App() {
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/resume" element={<Resume />} />
         <Route path="/" element={
@@ -426,22 +400,16 @@ export default function App() {
               </motion.button>
             </Magnetic>
                   <Magnetic strength={0.2}>
-                    <motion.a 
-                      href="/resume"
+                    <Link 
+                      to="/resume"
                       target="_blank"
-                      whileHover={{ 
-                        scale: 1.05, 
-                        y: -5,
-                        backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"
-                      }}
-                      whileTap={{ scale: 0.95 }}
                       className={`px-10 py-5 border rounded-full text-sm font-medium flex items-center gap-2 transition-all ${
                         isDark ? 'border-zinc-800' : 'border-zinc-200'
                       }`}
                     >
                       <BookOpen className="w-4 h-4" />
                       View Resume
-                    </motion.a>
+                    </Link>
                   </Magnetic>
           </div>
         </motion.div>
@@ -662,28 +630,34 @@ export default function App() {
             <span className={`italic font-serif ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>resilient.</span>
           </motion.h2>
           <div className={`flex flex-wrap justify-center gap-8 text-sm font-medium tracking-widest uppercase ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-            {['Email', 'LinkedIn', 'Resume'].map((item) => (
-              <motion.a 
-                key={item}
-                href={
-                  item === 'Email' ? '#' : 
-                  item === 'LinkedIn' ? 'https://www.linkedin.com/in/muppala-kalyan' : 
-                  '/resume'
-                } 
-                target={item !== 'Email' ? '_blank' : undefined}
-                rel={item !== 'Email' ? 'noopener noreferrer' : undefined}
-                onClick={(e) => {
-                  if (item === 'Email') {
-                    e.preventDefault();
-                    setShowEmailModal(true);
-                  }
-                }}
-                whileHover={{ y: -5, color: isDark ? '#fff' : '#000' }}
-                className="transition-colors"
-              >
-                {item}
-              </motion.a>
-            ))}
+            <motion.a 
+              key="Email"
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                setShowEmailModal(true);
+              }}
+              whileHover={{ y: -5, color: isDark ? '#fff' : '#000' }}
+              className="transition-colors"
+            >
+              Email
+            </motion.a>
+            <motion.a 
+              key="LinkedIn"
+              href="https://www.linkedin.com/in/muppala-kalyan" 
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -5, color: isDark ? '#fff' : '#000' }}
+              className="transition-colors"
+            >
+              LinkedIn
+            </motion.a>
+            <Link 
+              to="/resume"
+              className={`transition-colors uppercase font-medium tracking-widest text-sm ${isDark ? 'text-zinc-500 hover:text-white' : 'text-slate-500 hover:text-black'}`}
+            >
+              Resume
+            </Link>
           </div>
           <p className={`mt-24 text-xs tracking-widest uppercase ${isDark ? 'text-zinc-700' : 'text-slate-400'}`}>
             © 2026 Kalyan Muppala. All rights reserved.
@@ -758,6 +732,5 @@ export default function App() {
           </div>
         } />
       </Routes>
-    </BrowserRouter>
   );
 }
