@@ -345,15 +345,17 @@ export default function App() {
               </motion.button>
             </Magnetic>
                   <Magnetic strength={0.2}>
-                    <Link 
-                      to="/resume"
+                    <a 
+                      href="/portfolio/resume.pdf" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
                       className={`px-10 py-5 border rounded-full text-sm font-medium flex items-center gap-2 transition-all ${
                         isDark ? 'border-zinc-800' : 'border-zinc-200'
                       }`}
                     >
                       <BookOpen className="w-4 h-4" />
                       View Resume
-                    </Link>
+                    </a>
                   </Magnetic>
           </div>
         </motion.div>
@@ -489,7 +491,7 @@ export default function App() {
         <div className="flex justify-center gap-8 text-sm font-medium tracking-widest uppercase">
           <a href="#" onClick={(e) => { e.preventDefault(); setShowEmailModal(true); }} className="hover:text-white transition-colors">Email</a>
           <a href="https://www.linkedin.com/in/muppala-kalyan" target="_blank" className="hover:text-white transition-colors">LinkedIn</a>
-          <Link to="/resume" className="hover:text-white transition-colors">Resume</Link>
+          <a href="/portfolio/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Resume</a>
         </div>
         <p className="mt-24 text-xs tracking-widest uppercase text-zinc-700">© 2026 Kalyan Muppala. All rights reserved.</p>
       </footer>
