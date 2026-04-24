@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Routes, Route, Link } from 'react-router-dom'; // Removed BrowserRouter
+import { Routes, Route, Link } from 'react-router-dom';
 import { motion, AnimatePresence, useSpring, useMotionValue } from 'motion/react';
 import Resume from './components/Resume';
 import { 
@@ -19,7 +19,11 @@ import {
   Sun,
   Moon,
   ArrowRight,
-  ChevronDown
+  ChevronDown,
+  Activity,
+  Zap,
+  Globe,
+  Lock
 } from 'lucide-react';
 
 // --- Types ---
@@ -36,71 +40,74 @@ interface SkillCategory {
   icon: React.ReactNode;
 }
 
-// --- Data ---
+// --- Data Updated from Pre-Sales Resume ---
 const experiences: Experience[] = [
   {
-    company: "MilliporeSigma (Merck Group)",
-    role: "Senior Cloud Engineer – AWS Platform & Kubernetes",
-    period: "May 2024 - Present",
+    company: "Levo.ai",
+    role: "Solutions Consultant Intern",
+    period: "Apr 2026 - Present",
     description: [
-      "Architected and managed AWS EKS clusters, reducing downtime by 30% through enhanced lifecycle management, autoscaling, and secure networking.",
-      "Designed and maintained infrastructure as code with Terraform and CloudFormation to standardize AWS environments, reducing provisioning time by 40%.",
-      "Implemented monitoring, logging, and alerting with CloudWatch using observability best practices, resulting in 99.9% system uptime.",
-      "Enhanced cloud security by implementing IAM least-privilege policies, managing secrets, and enforcing encryption.",
-      "Optimized cloud costs by rightsizing EC2/ECS instances, applying tagging strategies, and conducting capacity planning.",
-      "Lead incident troubleshooting, root cause analysis, and postmortems to improve platform reliability."
+      "Driving end-to-end pre-sales execution including technical discovery, product demos, and PoV deployments for an AI-native API security platform[cite: 10].",
+      "Conducted discovery calls using a MEDDIC-aligned framework to assess prospects' API security posture and compliance gaps (SOC 2, PCI-DSS, HIPAA)[cite: 10].",
+      "Designed and executed Proof of Value (PoV) engagements by deploying eBPF sensors in Kubernetes, AWS, Azure, and GCP environments[cite: 11].",
+      "Built and maintained pipeline dashboards in HubSpot and Salesforce to track conversion rates and funnel velocity[cite: 12].",
+      "Developed competitive battlecards and RFP/RFI responses positioning Levo against competitors like Salt Security and Checkmarx[cite: 14]."
     ]
   },
   {
-    company: "University of New Haven",
-    role: "Graduate Research Assistant – Azure Cloud & Platform Automation",
-    period: "Apr 2023 - Apr 2024",
+    company: "MilliporeSigma",
+    role: "Cloud Engineer",
+    period: "Jun 2024 - Mar 2026",
     description: [
-      "Designed and supported Azure infrastructure for analytics and research workloads using ARM templates and Azure Key Vault.",
-      "Implemented Azure IaaS and PaaS services including Virtual Machines, VNets, Azure Storage, and Azure Monitor.",
-      "Assisted with cloud automation and Infrastructure as Code, improving deployment consistency and operational reliability."
+      "Architected reusable Terraform modules for VPCs and IAM policies, cutting infrastructure provisioning time by 40%[cite: 18].",
+      "Managed multi-region Amazon EKS clusters supporting containerized microservices, resolving critical networking and performance bottlenecks[cite: 19].",
+      "Implemented a full SRE observability stack using Prometheus and Grafana, reducing unplanned downtime by 20%[cite: 20].",
+      "Standardized blameless post-incident review workflows across engineering teams to improve system reliability[cite: 21].",
+      "Collaborated with DevOps teams to align infrastructure changes with business delivery timelines for enterprise-scale services[cite: 22]."
     ]
   },
   {
-    company: "Intellipaat Software Solutions",
-    role: "Cloud Infrastructure Engineer – AWS & DevOps",
-    period: "Jun 2021 - Jan 2023",
+    company: "Intellipaat",
+    role: "Cloud Infrastructure Engineer",
+    period: "Nov 2021 - Jan 2023",
     description: [
-      "Supported and maintained AWS cloud infrastructure including EC2, VPC, IAM, S3, RDS, and networking components.",
-      "Assisted in Terraform-based provisioning and environment automation across development and production accounts.",
-      "Developed Python and Bash automation scripts to reduce manual operational tasks and improve efficiency."
+      "Designed and automated multi-cloud infrastructure on AWS and Azure, improving system reliability by 30%[cite: 25].",
+      "Built end-to-end CI/CD pipelines using Jenkins and GitHub Actions, reducing release cycle times by 40%[cite: 26].",
+      "Automated environment provisioning using Terraform and Ansible, replacing manual setup and reducing configuration errors[cite: 27].",
+      "Containerized legacy and greenfield applications using Docker and Kubernetes to enable horizontal scaling[cite: 28].",
+      "Provided Tier 2/3 production support and root-cause analysis across networking and compute layers[cite: 29]."
     ]
   }
 ];
 
 const skillCategories: SkillCategory[] = [
   {
-    title: "Cloud Platforms",
-    skills: ["AWS (EKS, Lambda, S3, RDS)", "Azure (AKS, Functions, SQL)"],
+    title: "Pre-Sales & GTM",
+    skills: ["MEDDIC Framework", "Discovery & Demos", "HubSpot & Salesforce", "Salesloft & Outreach", "Competitive Intelligence"],
+    icon: <Zap className="w-5 h-5" />
+  },
+  {
+    title: "Cloud & Infrastructure",
+    skills: ["AWS (EKS, EC2, S3)", "Azure (AKS, DevOps)", "Terraform & Ansible", "Kubernetes & Docker"],
     icon: <Cloud className="w-5 h-5" />
   },
   {
-    title: "Infrastructure as Code",
-    skills: ["Terraform", "CloudFormation", "ARM Templates", "Bicep"],
-    icon: <Terminal className="w-5 h-5" />
+    title: "Security & Compliance",
+    skills: ["API Security & eBPF", "SOC 2, HIPAA, GDPR", "OWASP API Top 10", "Zero Trust Architecture"],
+    icon: <Lock className="w-5 h-5" />
   },
   {
-    title: "DevOps & Containers",
-    skills: ["Kubernetes", "Docker", "Helm", "CI/CD (GitHub Actions, Jenkins)"],
-    icon: <Cpu className="w-5 h-5" />
-  },
-  {
-    title: "Security & Networking",
-    skills: ["IAM/RBAC", "VPC/VNet Design", "Firewalls", "Key Vault"],
-    icon: <Shield className="w-5 h-5" />
+    title: "Observability & SRE",
+    skills: ["Prometheus & Grafana", "ELK Stack", "CI/CD Pipeline Design", "Python & SQL Automation"],
+    icon: <Activity className="w-5 h-5" />
   }
 ];
 
 const certifications = [
-  "AWS Certified Solutions Architect Professional",
-  "Microsoft Certified: Azure Solutions Architect Expert",
-  "HashiCorp Terraform Associate",
-  "Certified Kubernetes Administrator"
+  "AWS Certified Solutions Architect – Associate [cite: 33]",
+  "Microsoft Certified: Azure Fundamentals [cite: 35]",
+  "AWS Fundamentals: Going Cloud-Native [cite: 33]",
+  "AWS S3 Basics [cite: 35]"
 ];
 
 // --- Components ---
@@ -198,22 +205,6 @@ const CustomCursor = ({ isDark }: { isDark: boolean }) => {
 };
 
 const AnimatedBackground = ({ isDark }: { isDark: boolean }) => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 30, stiffness: 100 };
-  const glowX = useSpring(mouseX, springConfig);
-  const glowY = useSpring(mouseY, springConfig);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
-
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
       <motion.div 
@@ -242,23 +233,6 @@ const AnimatedBackground = ({ isDark }: { isDark: boolean }) => {
           className={`absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] rounded-full blur-[150px] opacity-[0.15] ${isDark ? 'bg-purple-600' : 'bg-purple-200'}`}
         />
       </div>
-
-      <motion.div
-        style={{
-          x: glowX,
-          y: glowY,
-          translateX: '-50%',
-          translateY: '-50%',
-          background: isDark 
-            ? 'radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, transparent 70%)' 
-            : 'radial-gradient(circle at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%)'
-        }}
-        className={`absolute w-[1000px] h-[1000px] rounded-full blur-[120px] ${isDark ? 'mix-blend-screen' : 'mix-blend-multiply opacity-20'}`}
-      />
-
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay" 
-        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-      />
     </div>
   );
 };
@@ -309,15 +283,9 @@ export default function App() {
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          whileHover={{ 
-            scale: 1.05,
-            letterSpacing: "0.1em",
-            color: isDark ? "#fff" : "#000",
-            textShadow: isDark ? "0 0 15px rgba(255,255,255,0.3)" : "0 0 15px rgba(0,0,0,0.1)"
-          }}
           className={`text-2xl font-serif italic tracking-tight cursor-pointer transition-all ${isDark ? 'text-white' : 'text-zinc-950'}`}
         >
-          Cloud Architect
+          Solutions Consultant
         </motion.div>
         
         <div className="flex items-center gap-8">
@@ -326,25 +294,16 @@ export default function App() {
               <motion.a 
                 key={item}
                 href={`#${item}`} 
-                whileHover={{ 
-                  y: -5, 
-                  opacity: 1,
-                  scale: 1.1,
-                  color: isDark ? "#fff" : "#000"
-                }}
                 className={`transition-all relative group ${isDark ? 'text-zinc-400' : 'text-zinc-950'}`}
               >
                 {item}
-                <motion.span 
-                  className={`absolute -bottom-1 left-0 w-0 h-[1px] ${isDark ? 'bg-white' : 'bg-black'} transition-all group-hover:w-full`}
-                />
+                <motion.span className={`absolute -bottom-1 left-0 w-0 h-[1px] ${isDark ? 'bg-white' : 'bg-black'} transition-all group-hover:w-full`} />
               </motion.a>
             ))}
           </div>
           
           <motion.button
             whileHover={{ scale: 1.1, rotate: 180 }}
-            whileTap={{ scale: 0.9 }}
             onClick={toggleTheme}
             className={`p-2 rounded-full transition-colors ${isDark ? 'bg-zinc-800 text-zinc-100 hover:bg-zinc-700' : 'bg-white text-zinc-900 shadow-lg hover:bg-zinc-50'}`}
           >
@@ -358,38 +317,25 @@ export default function App() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8 }}
           className="relative z-10 flex flex-col items-center"
         >
           <motion.h1 
             className="text-7xl md:text-[8rem] font-light leading-[0.9] tracking-tighter mb-8"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
           >
             Kalyan <br />
             <span className={`italic font-serif ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>Muppala.</span>
           </motion.h1>
           <motion.p 
             className={`text-xl md:text-2xl max-w-2xl font-light leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
           >
-            Senior Cloud Engineer driving multi-cloud solutions on AWS and Azure. 
-            Specializing in Kubernetes, Terraform, and DevOps automation.
+            Solutions Consultant with enterprise cloud engineering and pre-sales expertise. Accelerating cloud-enabled security solutions for enterprise clients[cite: 6].
           </motion.p>
           
           <div className="mt-12 flex flex-wrap justify-center gap-6">
             <Magnetic strength={0.2}>
               <motion.button 
                 onClick={() => setShowEmailModal(true)}
-                whileHover={{ 
-                  scale: 1.05, 
-                  x: 10,
-                  boxShadow: isDark ? "0 0 20px rgba(255,255,255,0.2)" : "0 0 20px rgba(0,0,0,0.1)"
-                }}
-                whileTap={{ scale: 0.95 }}
                 className={`px-10 py-5 rounded-full text-sm font-medium flex items-center gap-2 transition-all shadow-xl ${
                   isDark ? 'bg-zinc-100 text-black' : 'bg-zinc-900 text-white'
                 }`}
@@ -402,7 +348,6 @@ export default function App() {
                   <Magnetic strength={0.2}>
                     <Link 
                       to="/resume"
-                      target="_blank"
                       className={`px-10 py-5 border rounded-full text-sm font-medium flex items-center gap-2 transition-all ${
                         isDark ? 'border-zinc-800' : 'border-zinc-200'
                       }`}
@@ -413,27 +358,6 @@ export default function App() {
                   </Magnetic>
           </div>
         </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ 
-              y: [0, 8, 0],
-              opacity: [0.3, 0.7, 0.3]
-            }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-          >
-            <ChevronDown className={`w-5 h-5 ${isDark ? 'text-white' : 'text-black'}`} />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* Experience Section */}
@@ -441,7 +365,7 @@ export default function App() {
         <SectionHeader 
           isDark={isDark}
           title="Professional Experience" 
-          subtitle="A track record of building resilient, scalable, and cost-effective cloud infrastructures for global enterprises."
+          subtitle="Driving pre-sales motions and engineering cloud automation for global security and infrastructure leaders[cite: 4, 5]."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -460,7 +384,6 @@ export default function App() {
                   <motion.div 
                     layoutId="activeTab"
                     className={`absolute inset-0 rounded-2xl border ${isDark ? 'bg-zinc-900/40 border-zinc-700/50' : 'bg-white/60 border-zinc-200/50'} backdrop-blur-md -z-10`}
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
                 <div className="text-xs mb-1 uppercase tracking-widest font-semibold opacity-70">{exp.period}</div>
@@ -477,23 +400,14 @@ export default function App() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                className={`p-8 md:p-12 rounded-[2rem] border backdrop-blur-2xl transition-all duration-500 ${
-                  isDark 
-                    ? 'bg-zinc-900/40 border-zinc-800/50 shadow-[0_20px_50px_rgba(0,0,0,0.3)]' 
-                    : 'bg-white/70 border-zinc-200/50 shadow-[0_20px_50px_rgba(0,0,0,0.05)]'
+                className={`p-8 md:p-12 rounded-[2rem] border backdrop-blur-2xl ${
+                  isDark ? 'bg-zinc-900/40 border-zinc-800/50' : 'bg-white/70 border-zinc-200/50'
                 }`}
               >
                 <h3 className="text-3xl font-light mb-8">{experiences[activeTab].role}</h3>
                 <ul className="space-y-6">
                   {experiences[activeTab].description.map((item, i) => (
-                    <motion.li 
-                      key={i} 
-                      className={`flex gap-4 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                    >
+                    <motion.li key={i} className={`flex gap-4 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
                       <div className={`mt-2 w-1.5 h-1.5 rounded-full shrink-0 ${isDark ? 'bg-zinc-600' : 'bg-slate-300'}`} />
                       {item}
                     </motion.li>
@@ -510,38 +424,20 @@ export default function App() {
         <SectionHeader 
           isDark={isDark}
           title="Core Competencies" 
-          subtitle="Expertise across the entire cloud lifecycle, from architecture and security to automation and observability."
+          subtitle="A blend of technical depth and customer-facing experience in API security and cloud automation[cite: 4, 6]."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {skillCategories.map((cat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -8 }}
-              className={`p-8 rounded-[2rem] border backdrop-blur-2xl transition-all duration-500 group ${
-                isDark 
-                  ? 'bg-zinc-900/30 border-zinc-800/50 hover:bg-zinc-900/50 hover:border-zinc-700/50 shadow-2xl' 
-                  : 'bg-white/50 border-zinc-200/50 hover:bg-white/80 hover:border-zinc-300/50 shadow-xl'
+              className={`p-8 rounded-[2rem] border backdrop-blur-2xl transition-all ${
+                isDark ? 'bg-zinc-900/30 border-zinc-800/50' : 'bg-white/50 border-zinc-200/50'
               }`}
             >
-              <motion.div 
-                whileHover={{ 
-                  rotate: [0, -10, 10, -10, 0],
-                  scale: 1.2,
-                  backgroundColor: isDark ? "#fff" : "#000",
-                  color: isDark ? "#000" : "#fff"
-                }}
-                transition={{ duration: 0.5 }}
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all shadow-lg ${
-                  isDark ? 'bg-zinc-800 text-zinc-100' : 'bg-slate-100 text-zinc-900'
-                }`}
-              >
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${isDark ? 'bg-zinc-800 text-zinc-100' : 'bg-slate-100 text-zinc-900'}`}>
                 {cat.icon}
-              </motion.div>
+              </div>
               <h3 className="text-xl font-medium mb-4">{cat.title}</h3>
               <ul className="space-y-2">
                 {cat.skills.map((skill, i) => (
@@ -556,174 +452,68 @@ export default function App() {
         </div>
       </section>
 
-      {/* Certifications & Education */}
+      {/* Education Section */}
       <section id="about" className="py-32 px-6 md:px-24 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
           <div>
             <SectionHeader isDark={isDark} title="Certifications" />
             <div className="space-y-4">
               {certifications.map((cert, index) => (
-                <motion.div 
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ 
-                    x: 10, 
-                    backgroundColor: isDark ? 'rgba(39, 39, 42, 0.4)' : 'rgba(255, 255, 255, 0.6)',
-                  }}
-                  className={`flex items-center gap-4 p-5 rounded-2xl border backdrop-blur-xl transition-all cursor-default ${
-                    isDark ? 'bg-zinc-900/20 border-zinc-800/50' : 'bg-white/40 border-zinc-200/50 shadow-sm'
-                  }`}
-                >
-                  <motion.div 
-                    whileHover={{ scale: 1.3, rotate: -15, color: isDark ? "#fff" : "#000" }}
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${isDark ? 'bg-zinc-800 text-zinc-400' : 'bg-slate-100 text-slate-500'}`}
-                  >
-                    <Award className="w-6 h-6" />
-                  </motion.div>
+                <div key={index} className={`flex items-center gap-4 p-5 rounded-2xl border ${isDark ? 'bg-zinc-900/20 border-zinc-800/50' : 'bg-white/40 border-zinc-200/50'}`}>
+                  <Award className="w-6 h-6 text-zinc-400" />
                   <span className={`font-medium text-lg ${isDark ? 'text-zinc-300' : 'text-slate-700'}`}>{cert}</span>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
-
           <div>
             <SectionHeader isDark={isDark} title="Education" />
             <div className="space-y-8">
-              <motion.div 
-                className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}
-                whileHover={{ x: 5 }}
-              >
-                <div className={`absolute top-0 left-[-4px] w-2 h-2 rounded-full ${isDark ? 'bg-zinc-100' : 'bg-zinc-900'}`} />
-                <h4 className="text-xl font-medium mb-1">Master of Science</h4>
-                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'} mb-2`}>Business Analytics & Technologies</p>
-                <p className={`text-sm italic ${isDark ? 'text-zinc-600' : 'text-slate-400'}`}>University of New Haven</p>
-              </motion.div>
-              <motion.div 
-                className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}
-                whileHover={{ x: 5 }}
-              >
-                <div className={`absolute top-0 left-[-4px] w-2 h-2 rounded-full ${isDark ? 'bg-zinc-100' : 'bg-zinc-900'}`} />
-                <h4 className="text-xl font-medium mb-1">Bachelor of Technology</h4>
-                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'} mb-2`}>Computer Science Engineering</p>
-                <p className={`text-sm italic ${isDark ? 'text-zinc-600' : 'text-slate-400'}`}>Lovely Professional University</p>
-              </motion.div>
+              <div className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
+                <h4 className="text-xl font-medium mb-1">Master of Science, Business Analytics [cite: 31]</h4>
+                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>University of New Haven [cite: 31]</p>
+              </div>
+              <div className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
+                <h4 className="text-xl font-medium mb-1">Bachelor of Science, Computer Science [cite: 32]</h4>
+                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>Lovely Professional University [cite: 32]</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className={`py-24 px-6 md:px-24 border-t transition-colors duration-700 text-center ${isDark ? 'border-zinc-900' : 'border-zinc-200'}`}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <motion.h2 
-            className="text-4xl md:text-6xl font-light mb-12 tracking-tighter"
-            whileHover={{ scale: 1.02 }}
-          >
-            Let's build something <br />
-            <span className={`italic font-serif ${isDark ? 'text-zinc-500' : 'text-slate-400'}`}>resilient.</span>
-          </motion.h2>
-          <div className={`flex flex-wrap justify-center gap-8 text-sm font-medium tracking-widest uppercase ${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>
-            <motion.a 
-              key="Email"
-              href="#" 
-              onClick={(e) => {
-                e.preventDefault();
-                setShowEmailModal(true);
-              }}
-              whileHover={{ y: -5, color: isDark ? '#fff' : '#000' }}
-              className="transition-colors"
-            >
-              Email
-            </motion.a>
-            <motion.a 
-              key="LinkedIn"
-              href="https://www.linkedin.com/in/muppala-kalyan" 
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -5, color: isDark ? '#fff' : '#000' }}
-              className="transition-colors"
-            >
-              LinkedIn
-            </motion.a>
-            <Link 
-              to="/resume"
-              className={`transition-colors uppercase font-medium tracking-widest text-sm ${isDark ? 'text-zinc-500 hover:text-white' : 'text-slate-500 hover:text-black'}`}
-            >
-              Resume
-            </Link>
-          </div>
-          <p className={`mt-24 text-xs tracking-widest uppercase ${isDark ? 'text-zinc-700' : 'text-slate-400'}`}>
-            © 2026 Kalyan Muppala. All rights reserved.
-          </p>
-        </motion.div>
+      <footer className="py-24 px-6 md:px-24 border-t border-zinc-900 text-center">
+        <h2 className="text-4xl md:text-6xl font-light mb-12 tracking-tighter">
+          Let's build something <span className="italic font-serif text-zinc-500">resilient.</span>
+        </h2>
+        <div className="flex justify-center gap-8 text-sm font-medium tracking-widest uppercase">
+          <a href="#" onClick={(e) => { e.preventDefault(); setShowEmailModal(true); }} className="hover:text-white transition-colors">Email</a>
+          <a href="https://www.linkedin.com/in/muppala-kalyan" target="_blank" className="hover:text-white transition-colors">LinkedIn</a>
+          <Link to="/resume" className="hover:text-white transition-colors">Resume</Link>
+        </div>
+        <p className="mt-24 text-xs tracking-widest uppercase text-zinc-700">© 2026 Kalyan Muppala. All rights reserved.</p>
       </footer>
+
       {/* Email Modal */}
       <AnimatePresence>
         {showEmailModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowEmailModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className={`relative w-full max-w-md p-8 rounded-3xl border shadow-2xl ${
-                isDark ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-white border-zinc-200 text-zinc-900'
-              }`}
-            >
-              <h3 className="text-2xl font-light mb-6 tracking-tight">Get in touch</h3>
-              <p className={`text-sm mb-8 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
-                Feel free to reach out for collaborations or just a friendly hello.
-              </p>
-              
-              <div className={`p-6 rounded-2xl border mb-8 flex items-center justify-between group cursor-pointer transition-all ${
-                isDark ? 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-500' : 'bg-zinc-50 border-zinc-200 hover:border-zinc-300'
-              }`}
-              onClick={() => {
-                navigator.clipboard.writeText('mdjkalyan@gmail.com');
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
-              }}
-              >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowEmailModal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <motion.div className={`relative w-full max-w-md p-8 rounded-3xl border shadow-2xl ${isDark ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-white border-zinc-200 text-zinc-900'}`}>
+              <h3 className="text-2xl font-light mb-6">Get in touch</h3>
+              <div className={`p-6 rounded-2xl border mb-8 flex items-center justify-between group cursor-pointer ${isDark ? 'bg-zinc-800/50 border-zinc-700' : 'bg-zinc-50 border-zinc-200'}`}
+                onClick={() => { navigator.clipboard.writeText('mdjkalyan@gmail.com'); setCopied(true); setTimeout(() => setCopied(false), 2000); }}>
                 <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDark ? 'bg-zinc-700' : 'bg-white shadow-sm'}`}>
-                    <Mail className="w-5 h-5" />
-                  </div>
+                  <Mail className="w-5 h-5" />
                   <div>
-                    <div className="text-xs uppercase tracking-widest opacity-50 mb-1">Email</div>
+                    <div className="text-xs uppercase opacity-50">Email</div>
                     <div className="font-medium">mdjkalyan@gmail.com</div>
                   </div>
                 </div>
-                <motion.div 
-                  animate={{ opacity: copied ? 1 : 0.5 }}
-                  className="text-xs font-medium uppercase tracking-widest"
-                >
-                  {copied ? 'Copied!' : 'Copy'}
-                </motion.div>
+                <div className="text-xs">{copied ? 'Copied!' : 'Copy'}</div>
               </div>
-
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setShowEmailModal(false)}
-                className={`w-full py-4 rounded-2xl font-medium transition-all ${
-                  isDark ? 'bg-zinc-100 text-black hover:bg-white' : 'bg-zinc-900 text-white hover:bg-black'
-                }`}
-              >
-                Close
-              </motion.button>
+              <button onClick={() => setShowEmailModal(false)} className={`w-full py-4 rounded-2xl font-medium ${isDark ? 'bg-zinc-100 text-black' : 'bg-zinc-900 text-white'}`}>Close</button>
             </motion.div>
           </div>
         )}
