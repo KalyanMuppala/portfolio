@@ -22,7 +22,6 @@ import {
   ChevronDown,
   Activity,
   Zap,
-  Globe,
   Lock
 } from 'lucide-react';
 
@@ -40,18 +39,18 @@ interface SkillCategory {
   icon: React.ReactNode;
 }
 
-// --- Data Updated from Pre-Sales Resume ---
+// --- Data ---
 const experiences: Experience[] = [
   {
     company: "Levo.ai",
     role: "Solutions Consultant Intern",
     period: "Apr 2026 - Present",
     description: [
-      "Driving end-to-end pre-sales execution including technical discovery, product demos, and PoV deployments for an AI-native API security platform[cite: 10].",
-      "Conducted discovery calls using a MEDDIC-aligned framework to assess prospects' API security posture and compliance gaps (SOC 2, PCI-DSS, HIPAA)[cite: 10].",
-      "Designed and executed Proof of Value (PoV) engagements by deploying eBPF sensors in Kubernetes, AWS, Azure, and GCP environments[cite: 11].",
-      "Built and maintained pipeline dashboards in HubSpot and Salesforce to track conversion rates and funnel velocity[cite: 12].",
-      "Developed competitive battlecards and RFP/RFI responses positioning Levo against competitors like Salt Security and Checkmarx[cite: 14]."
+      "Driving end-to-end pre-sales execution including technical discovery, product demos, and PoV deployments for an AI-native API security platform.",
+      "Conducted discovery calls using a MEDDIC-aligned framework to assess prospects' API security posture and compliance gaps (SOC 2, PCI-DSS, HIPAA, GDPR).",
+      "Designed and executed Proof of Value (PoV) engagements by deploying Levo's eBPF sensors in prospect Kubernetes, AWS, Azure, and GCP environments.",
+      "Built and maintained pipeline dashboards in HubSpot and Salesforce to track conversion rates and funnel velocity.",
+      "Developed competitive battlecards and RFP/RFI responses positioning Levo against competitors to shorten evaluation cycles."
     ]
   },
   {
@@ -59,11 +58,11 @@ const experiences: Experience[] = [
     role: "Cloud Engineer",
     period: "Jun 2024 - Mar 2026",
     description: [
-      "Architected reusable Terraform modules for VPCs and IAM policies, cutting infrastructure provisioning time by 40%[cite: 18].",
-      "Managed multi-region Amazon EKS clusters supporting containerized microservices, resolving critical networking and performance bottlenecks[cite: 19].",
-      "Implemented a full SRE observability stack using Prometheus and Grafana, reducing unplanned downtime by 20%[cite: 20].",
-      "Standardized blameless post-incident review workflows across engineering teams to improve system reliability[cite: 21].",
-      "Collaborated with DevOps teams to align infrastructure changes with business delivery timelines for enterprise-scale services[cite: 22]."
+      "Architected reusable Terraform modules for VPCs and IAM policies, cutting infrastructure provisioning time by 40%.",
+      "Managed multi-region Amazon EKS clusters supporting containerized microservices, resolving critical networking and performance bottlenecks.",
+      "Implemented a full SRE observability stack using Prometheus and Grafana, reducing unplanned downtime by 20%.",
+      "Standardized blameless post-incident review workflows across engineering teams to improve system reliability.",
+      "Collaborated with DevOps teams to align infrastructure changes with business delivery timelines for enterprise-scale services."
     ]
   },
   {
@@ -71,11 +70,11 @@ const experiences: Experience[] = [
     role: "Cloud Infrastructure Engineer",
     period: "Nov 2021 - Jan 2023",
     description: [
-      "Designed and automated multi-cloud infrastructure on AWS and Azure, improving system reliability by 30%[cite: 25].",
-      "Built end-to-end CI/CD pipelines using Jenkins and GitHub Actions, reducing release cycle times by 40%[cite: 26].",
-      "Automated environment provisioning using Terraform and Ansible, replacing manual setup and reducing configuration errors[cite: 27].",
-      "Containerized legacy and greenfield applications using Docker and Kubernetes to enable horizontal scaling[cite: 28].",
-      "Provided Tier 2/3 production support and root-cause analysis across networking and compute layers[cite: 29]."
+      "Designed and automated multi-cloud infrastructure on AWS and Azure, improving system reliability by 30%.",
+      "Built end-to-end CI/CD pipelines using Jenkins and GitHub Actions, reducing release cycle times by 40%.",
+      "Automated environment provisioning using Terraform and Ansible, replacing manual setup and reducing configuration errors.",
+      "Containerized legacy and greenfield applications using Docker and Kubernetes to enable horizontal scaling.",
+      "Provided Tier 2/3 production support and root-cause analysis across networking and compute layers."
     ]
   }
 ];
@@ -104,10 +103,10 @@ const skillCategories: SkillCategory[] = [
 ];
 
 const certifications = [
-  "AWS Certified Solutions Architect – Associate [cite: 33]",
-  "Microsoft Certified: Azure Fundamentals [cite: 35]",
-  "AWS Fundamentals: Going Cloud-Native [cite: 33]",
-  "AWS S3 Basics [cite: 35]"
+  "AWS Certified Solutions Architect – Associate",
+  "Microsoft Certified: Azure Fundamentals",
+  "AWS Fundamentals: Going Cloud-Native",
+  "AWS S3 Basics"
 ];
 
 // --- Components ---
@@ -329,7 +328,7 @@ export default function App() {
           <motion.p 
             className={`text-xl md:text-2xl max-w-2xl font-light leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}
           >
-            Solutions Consultant with enterprise cloud engineering and pre-sales expertise. Accelerating cloud-enabled security solutions for enterprise clients[cite: 6].
+            Solutions Consultant with enterprise cloud engineering and pre-sales expertise. Accelerating cloud-enabled security solutions for enterprise clients.
           </motion.p>
           
           <div className="mt-12 flex flex-wrap justify-center gap-6">
@@ -365,7 +364,7 @@ export default function App() {
         <SectionHeader 
           isDark={isDark}
           title="Professional Experience" 
-          subtitle="Driving pre-sales motions and engineering cloud automation for global security and infrastructure leaders[cite: 4, 5]."
+          subtitle="Driving pre-sales motions and engineering cloud automation for global security and infrastructure leaders."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -424,7 +423,7 @@ export default function App() {
         <SectionHeader 
           isDark={isDark}
           title="Core Competencies" 
-          subtitle="A blend of technical depth and customer-facing experience in API security and cloud automation[cite: 4, 6]."
+          subtitle="A blend of technical depth and customer-facing experience in API security and cloud automation."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -452,7 +451,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Education Section */}
+      {/* Education & Certifications Section */}
       <section id="about" className="py-32 px-6 md:px-24 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
           <div>
@@ -470,12 +469,12 @@ export default function App() {
             <SectionHeader isDark={isDark} title="Education" />
             <div className="space-y-8">
               <div className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-                <h4 className="text-xl font-medium mb-1">Master of Science, Business Analytics [cite: 31]</h4>
-                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>University of New Haven [cite: 31]</p>
+                <h4 className="text-xl font-medium mb-1">Master of Science, Business Analytics</h4>
+                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>University of New Haven</p>
               </div>
               <div className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
-                <h4 className="text-xl font-medium mb-1">Bachelor of Science, Computer Science [cite: 32]</h4>
-                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>Lovely Professional University [cite: 32]</p>
+                <h4 className="text-xl font-medium mb-1">Bachelor of Science, Computer Science</h4>
+                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>Lovely Professional University</p>
               </div>
             </div>
           </div>
