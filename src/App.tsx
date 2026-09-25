@@ -462,7 +462,7 @@ export default function App() {
         </h2>
         <div className="flex justify-center gap-8 text-sm font-medium tracking-widest uppercase">
           <a href="#" onClick={(e) => { e.preventDefault(); setShowEmailModal(true); }} className="hover:text-white transition-colors">Email</a>
-          <a href="https://www.linkedin.com/in/muppala-kalyan" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
+          <a href="https://www.linkedin.com/in/muppalakalyan/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
           <a href="https://github.com/KalyanMuppala" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
           <a href="/portfolio/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Resume</a>
         </div>
