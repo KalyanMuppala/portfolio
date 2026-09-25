@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { motion, AnimatePresence, useSpring, useMotionValue } from 'motion/react';
-import Resume from './components/Resume';
+import WaveBackground from './components/WaveBackground';
 import { 
   Cloud, 
   Terminal, 
@@ -19,10 +19,8 @@ import {
   Sun,
   Moon,
   ArrowRight,
-  ChevronDown,
   Activity,
-  Zap,
-  Lock
+  Zap
 } from 'lucide-react';
 
 // --- Types ---
@@ -43,26 +41,26 @@ interface SkillCategory {
 const experiences: Experience[] = [
   {
     company: "Levo.ai",
-    role: "Solutions Consultant Intern",
+    role: "AI Solutions Engineer (Forward Deployed)",
     period: "Apr 2026 - Present",
     description: [
-      "Driving end-to-end pre-sales execution including technical discovery, product demos, and PoV deployments for an AI-native API security platform.",
-      "Conducted discovery calls using a MEDDIC-aligned framework to assess prospects' API security posture and compliance gaps (SOC 2, PCI-DSS, HIPAA, GDPR).",
-      "Designed and executed Proof of Value (PoV) engagements by deploying Levo's eBPF sensors in prospect Kubernetes, AWS, Azure, and GCP environments.",
-      "Built and maintained pipeline dashboards in HubSpot and Salesforce to track conversion rates and funnel velocity.",
-      "Developed competitive battlecards and RFP/RFI responses positioning Levo against competitors to shorten evaluation cycles."
+      "Embed with customer security and platform teams during proof-of-value engagements, running technical discovery, scoping deployment prerequisites, and owning delivery through to a signed-off evaluation.",
+      "Deploy eBPF-based runtime API security sensors into customer production Kubernetes clusters (Amazon EKS, Azure AKS, Google GKE) using Helm, within each customer's network policies, IAM/RBAC model, and change-control process.",
+      "Debug deployment blockers live with customer engineers, from network restrictions and IAM/RBAC misconfigurations to sensor performance issues, without pulling in core engineering.",
+      "Write Python and SQL tooling against customer API telemetry to produce risk and posture reports mapped to the OWASP API Top 10 and sensitive-data exposure, then walk teams through a prioritized remediation plan.",
+      "Built reproducible Kubernetes evaluation environments so every engagement starts from a known-good baseline, with health checks on deployed sensor fleets so failures surface before the customer notices.",
+      "Bring field issues back to product and engineering with repro steps, logs, and suggested fixes, and keep runbooks current so any engineer can pick up an engagement mid-stream."
     ]
   },
   {
     company: "MilliporeSigma",
     role: "Cloud Engineer",
-    period: "Jun 2024 - Mar 2026",
+    period: "Jun 2024 - Apr 2026",
     description: [
-      "Architected reusable Terraform modules for VPCs and IAM policies, cutting infrastructure provisioning time by 40%.",
-      "Managed multi-region Amazon EKS clusters supporting containerized microservices, resolving critical networking and performance bottlenecks.",
-      "Implemented a full SRE observability stack using Prometheus and Grafana, reducing unplanned downtime by 20%.",
-      "Standardized blameless post-incident review workflows across engineering teams to improve system reliability.",
-      "Collaborated with DevOps teams to align infrastructure changes with business delivery timelines for enterprise-scale services."
+      "Designed and delivered proof-of-value pipelines using GitHub Actions and eBPF runtime sensors, letting stakeholders evaluate new cloud capabilities within two weeks.",
+      "Ran multi-region Amazon EKS clusters (upgrades, autoscaling, VPC CNI networking, IRSA) and tracked down the networking and registry bottlenecks that kept two product teams from meeting release SLAs.",
+      "Stood up a Prometheus and Grafana observability stack with SLIs, SLOs, alert thresholds, and incident runbooks agreed with each owning team, cutting unplanned downtime by 20% and bringing MTTR down.",
+      "Carried on-call and ran blameless post-incident reviews; root-cause findings went back into shared fixes that reduced repeat incidents across engineering."
     ]
   },
   {
@@ -70,43 +68,51 @@ const experiences: Experience[] = [
     role: "Cloud Infrastructure Engineer",
     period: "Nov 2021 - Jan 2023",
     description: [
-      "Designed and automated multi-cloud infrastructure on AWS and Azure, improving system reliability by 30%.",
-      "Built end-to-end CI/CD pipelines using Jenkins and GitHub Actions, reducing release cycle times by 40%.",
-      "Automated environment provisioning using Terraform and Ansible, replacing manual setup and reducing configuration errors.",
-      "Containerized legacy and greenfield applications using Docker and Kubernetes to enable horizontal scaling.",
-      "Provided Tier 2/3 production support and root-cause analysis across networking and compute layers."
+      "Replaced manual provisioning with Terraform and Ansible across AWS and Azure for platforms serving thousands of concurrent users; monitoring, autoscaling, and automated failover cut downtime by 40%.",
+      "Built Jenkins and GitHub Actions pipelines covering build, test, and deploy, shortening release cycles by 40% and removing the 2-day wait that manual handoffs used to add.",
+      "Containerized applications with Docker and Kubernetes and set up centralized logging with CloudWatch and the ELK stack, giving developers one place to look when something broke.",
+      "Handled Tier 2/3 production support, working incidents directly with affected teams and doing root-cause analysis across networking, compute, and container layers within SLA."
     ]
   }
 ];
 
 const skillCategories: SkillCategory[] = [
   {
-    title: "Pre-Sales & GTM",
-    skills: ["MEDDIC Framework", "Discovery & Demos", "HubSpot & Salesforce", "Salesloft & Outreach", "Competitive Intelligence"],
+    title: "Forward Deployed Engineering",
+    skills: ["Technical Discovery", "Proof-of-Value Delivery", "Customer Production Deployments", "Solution Scoping", "Remediation Planning", "Stakeholder Communication"],
     icon: <Zap className="w-5 h-5" />
   },
   {
-    title: "Cloud & Infrastructure",
-    skills: ["AWS (EKS, EC2, S3)", "Azure (AKS, DevOps)", "Terraform & Ansible", "Kubernetes & Docker"],
+    title: "Cloud Platforms",
+    skills: ["AWS (EKS, EC2, S3, IAM, VPC, CloudWatch)", "Azure (AKS, VNets, DevOps, RBAC)", "GCP (GKE)"],
     icon: <Cloud className="w-5 h-5" />
   },
   {
-    title: "Security & Compliance",
-    skills: ["API Security & eBPF", "SOC 2, HIPAA, GDPR", "OWASP API Top 10", "Zero Trust Architecture"],
-    icon: <Lock className="w-5 h-5" />
+    title: "Containers & IaC",
+    skills: ["Kubernetes", "Helm", "Docker", "Terraform", "Ansible"],
+    icon: <Cpu className="w-5 h-5" />
+  },
+  {
+    title: "CI/CD & Languages",
+    skills: ["Jenkins", "GitHub Actions", "Azure DevOps", "Git", "Python, SQL & Bash"],
+    icon: <Terminal className="w-5 h-5" />
   },
   {
     title: "Observability & SRE",
-    skills: ["Prometheus & Grafana", "ELK Stack", "CI/CD Pipeline Design", "Python & SQL Automation"],
+    skills: ["Prometheus & Grafana", "ELK Stack", "CloudWatch & Azure Monitor", "SLIs / SLOs", "Incident Response"],
     icon: <Activity className="w-5 h-5" />
+  },
+  {
+    title: "Security",
+    skills: ["eBPF Runtime Sensors", "API Security", "OWASP API Top 10", "IAM / RBAC"],
+    icon: <Shield className="w-5 h-5" />
   }
 ];
 
 const certifications = [
   "AWS Certified Solutions Architect – Associate",
-  "Microsoft Certified: Azure Fundamentals",
-  "AWS Fundamentals: Going Cloud-Native",
-  "AWS S3 Basics"
+  "Microsoft Certified: Azure Network Engineer Associate (AZ-700)",
+  "Microsoft Certified: Azure Administrator Associate (AZ-104)"
 ];
 
 // --- Components ---
@@ -203,39 +209,6 @@ const CustomCursor = ({ isDark }: { isDark: boolean }) => {
   );
 };
 
-const AnimatedBackground = ({ isDark }: { isDark: boolean }) => {
-  return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-      <motion.div 
-        animate={{ 
-          backgroundColor: isDark ? '#050505' : '#f8fafc'
-        }}
-        className="absolute inset-0 transition-colors duration-1000"
-      />
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          animate={{
-            x: [0, 100, -100, 0],
-            y: [0, -100, 100, 0],
-            scale: [1, 1.1, 0.9, 1],
-          }}
-          transition={{ duration: 40, repeat: Infinity, ease: "easeInOut" }}
-          className={`absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full blur-[150px] opacity-[0.15] ${isDark ? 'bg-blue-600' : 'bg-blue-200'}`}
-        />
-        <motion.div
-          animate={{
-            x: [0, -100, 100, 0],
-            y: [0, 100, -100, 0],
-            scale: [1, 0.9, 1.1, 1],
-          }}
-          transition={{ duration: 45, repeat: Infinity, ease: "easeInOut" }}
-          className={`absolute -bottom-[20%] -right-[10%] w-[70%] h-[70%] rounded-full blur-[150px] opacity-[0.15] ${isDark ? 'bg-purple-600' : 'bg-purple-200'}`}
-        />
-      </div>
-    </div>
-  );
-};
-
 const SectionHeader = ({ title, subtitle, isDark, centered = true }: { title: string; subtitle?: string; isDark: boolean; centered?: boolean }) => (
   <div className={`mb-12 ${centered ? 'text-center flex flex-col items-center' : ''}`}>
     <motion.h2 
@@ -270,11 +243,10 @@ export default function App() {
 
   return (
       <Routes>
-        <Route path="/resume" element={<Resume />} />
         <Route path="/" element={
           <div className={`min-h-screen font-sans selection:bg-zinc-500 selection:text-white transition-colors duration-700 ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}>
             <CustomCursor isDark={isDark} />
-            <AnimatedBackground isDark={isDark} />
+            <WaveBackground isDark={isDark} />
             
             <div className="relative z-10">
               {/* Navigation */}
@@ -282,9 +254,9 @@ export default function App() {
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className={`text-2xl font-serif italic tracking-tight cursor-pointer transition-all ${isDark ? 'text-white' : 'text-zinc-950'}`}
+          className={`text-xl md:text-2xl font-serif italic tracking-tight cursor-pointer transition-all ${isDark ? 'text-white' : 'text-zinc-950'}`}
         >
-          Solutions Consultant
+          Forward Deployed Engineer
         </motion.div>
         
         <div className="flex items-center gap-8">
@@ -328,7 +300,7 @@ export default function App() {
           <motion.p 
             className={`text-xl md:text-2xl max-w-2xl font-light leading-relaxed ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}
           >
-            Solutions Consultant with enterprise cloud engineering and pre-sales expertise. Accelerating cloud-enabled security solutions for enterprise clients.
+            Forward Deployed Engineer with 3+ years across AWS, Azure, and GCP. I embed with customer teams to deploy, debug, and ship API security on production Kubernetes.
           </motion.p>
           
           <div className="mt-12 flex flex-wrap justify-center gap-6">
@@ -366,7 +338,7 @@ export default function App() {
         <SectionHeader 
           isDark={isDark}
           title="Professional Experience" 
-          subtitle="Driving pre-sales motions and engineering cloud automation for global security and infrastructure leaders."
+          subtitle="From the first technical call to production rollout: deploying security inside customer environments, built on years of platform engineering and SRE."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -425,10 +397,10 @@ export default function App() {
         <SectionHeader 
           isDark={isDark}
           title="Core Competencies" 
-          subtitle="A blend of technical depth and customer-facing experience in API security and cloud automation."
+          subtitle="Equally at home on a call with customer engineers or writing the Python, SQL, or Terraform an engagement needs to get unstuck."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {skillCategories.map((cat, index) => (
             <motion.div
               key={index}
@@ -472,11 +444,11 @@ export default function App() {
             <div className="space-y-8">
               <div className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                 <h4 className="text-xl font-medium mb-1">Master of Science, Business Analytics</h4>
-                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>University of New Haven</p>
+                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>University of New Haven · GPA 4.0</p>
               </div>
               <div className={`relative pl-8 border-l ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`}>
                 <h4 className="text-xl font-medium mb-1">Bachelor of Science, Computer Science</h4>
-                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>Lovely Professional University</p>
+                <p className={`${isDark ? 'text-zinc-500' : 'text-slate-500'}`}>Lovely Professional University · GPA 3.40</p>
               </div>
             </div>
           </div>
@@ -490,7 +462,8 @@ export default function App() {
         </h2>
         <div className="flex justify-center gap-8 text-sm font-medium tracking-widest uppercase">
           <a href="#" onClick={(e) => { e.preventDefault(); setShowEmailModal(true); }} className="hover:text-white transition-colors">Email</a>
-          <a href="https://www.linkedin.com/in/muppala-kalyan" target="_blank" className="hover:text-white transition-colors">LinkedIn</a>
+          <a href="https://www.linkedin.com/in/muppala-kalyan" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
+          <a href="https://github.com/KalyanMuppala" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
           <a href="/portfolio/resume.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Resume</a>
         </div>
         <p className="mt-24 text-xs tracking-widest uppercase text-zinc-700">© 2026 Kalyan Muppala. All rights reserved.</p>
@@ -504,12 +477,12 @@ export default function App() {
             <motion.div className={`relative w-full max-w-md p-8 rounded-3xl border shadow-2xl ${isDark ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-white border-zinc-200 text-zinc-900'}`}>
               <h3 className="text-2xl font-light mb-6">Get in touch</h3>
               <div className={`p-6 rounded-2xl border mb-8 flex items-center justify-between group cursor-pointer ${isDark ? 'bg-zinc-800/50 border-zinc-700' : 'bg-zinc-50 border-zinc-200'}`}
-                onClick={() => { navigator.clipboard.writeText('mdjkalyan@gmail.com'); setCopied(true); setTimeout(() => setCopied(false), 2000); }}>
+                onClick={() => { navigator.clipboard.writeText('kalyan.muppala7@gmail.com'); setCopied(true); setTimeout(() => setCopied(false), 2000); }}>
                 <div className="flex items-center gap-4">
                   <Mail className="w-5 h-5" />
                   <div>
                     <div className="text-xs uppercase opacity-50">Email</div>
-                    <div className="font-medium">mdjkalyan@gmail.com</div>
+                    <div className="font-medium">kalyan.muppala7@gmail.com</div>
                   </div>
                 </div>
                 <div className="text-xs">{copied ? 'Copied!' : 'Copy'}</div>
